@@ -38,6 +38,15 @@ Install RViz if you want to view the IMU and camera topics:
 sudo apt install ros-<distro>-rviz2
 ```
 
+Install image viewing tools and the compressed image transport plugin if you want
+to view `MJPG` streams:
+
+```bash
+sudo apt install \
+  ros-<distro>-rqt-image-view \
+  ros-<distro>-compressed-image-transport
+```
+
 ## Build From Source
 
 Clone this wrapper into a ROS2 workspace:
@@ -103,6 +112,38 @@ Use RViz:
 ```bash
 rviz2 -d install/vizionsdk_ros2/share/vizionsdk_ros2/rviz/vizionsdk_imu_camera_compressed.rviz
 ```
+
+View the `MJPG` stream with `rqt_image_view`:
+
+```bash
+rqt_image_view
+```
+
+Select the `image_raw/compressed` topic in the viewer.
+
+If RViz or `rqt_image_view` reports an error like this:
+
+```text
+Error subscribing: Unable to load plugin for transport 'image_transport/compressed_sub'
+Declared types are image_transport/raw_sub
+```
+
+the computer running the viewer is missing the compressed image transport
+subscriber plugin. Install it with:
+
+```bash
+sudo apt install ros-<distro>-compressed-image-transport
+```
+
+Then source the ROS2 environment again and restart the viewer:
+
+```bash
+source /opt/ros/<distro>/setup.bash
+source install/local_setup.bash
+```
+
+Alternatively, publish an uncompressed format such as `YUY2` and subscribe to
+`image_raw`, but this uses much more bandwidth than `MJPG`.
 
 ## ISP Controls
 
