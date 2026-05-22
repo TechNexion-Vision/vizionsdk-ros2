@@ -54,6 +54,12 @@ add_executable(list_devices
 )
 target_link_libraries(list_devices vizionsdk_ros2_conversions)
 
+add_executable(yuv422_to_bgr_node
+  src/yuv422_to_bgr_node.cpp
+)
+target_link_libraries(yuv422_to_bgr_node vizionsdk_ros2_conversions)
+ament_target_dependencies(yuv422_to_bgr_node rclcpp sensor_msgs)
+
 if(BUILD_TESTING)
   include(CTest)
   add_executable(test_conversions
@@ -73,12 +79,19 @@ if(BUILD_TESTING)
   )
   target_link_libraries(test_isp_controls PRIVATE vizionsdk_ros2_conversions)
   add_test(NAME test_isp_controls COMMAND test_isp_controls)
+
+  add_executable(test_yuv422_converter
+    test/test_yuv422_converter.cpp
+  )
+  target_link_libraries(test_yuv422_converter PRIVATE vizionsdk_ros2_conversions)
+  add_test(NAME test_yuv422_converter COMMAND test_yuv422_converter)
 endif()
 
 install(TARGETS
   vizionsdk_ros2_node
   vizionsdk_camera_node
   list_devices
+  yuv422_to_bgr_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}

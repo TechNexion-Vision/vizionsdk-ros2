@@ -142,8 +142,41 @@ source /opt/ros/<distro>/setup.bash
 source install/local_setup.bash
 ```
 
-Alternatively, publish an uncompressed format such as `YUY2` and subscribe to
-`image_raw`, but this uses much more bandwidth than `MJPG`.
+If RViz reports `unsupported image encoding uyvy`, the selected camera format is
+a packed YUV format that RViz cannot display directly. Use `MJPG` with the
+compressed image transport plugin, run the converter node below, or select an
+RViz-friendly raw format such as `BGR`, `BGRA`, or `RGB` if the camera
+advertises one:
+
+```bash
+ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
+  publish_image:=true \
+  image_format:=BGR
+```
+
+Raw RGB/BGR streams use much more bandwidth than `MJPG`.
+
+To keep the camera stream as `UYVY` for customers while also viewing it in RViz,
+start the camera with `UYVY`:
+
+```bash
+ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
+  publish_imu:=false \
+  publish_image:=true \
+  image_format:=UYVY
+```
+
+Then start the converter in another terminal:
+
+```bash
+ros2 run vizionsdk_ros2 yuv422_to_bgr_node --ros-args \
+  -p input_topic:=/image_raw \
+  -p output_topic:=/image_raw/bgr
+```
+
+Subscribe RViz or `rqt_image_view` to `image_raw/bgr`. The original
+`image_raw` topic remains `uyvy` for applications that need the camera's raw
+format.
 
 ## ISP Controls
 
