@@ -32,6 +32,10 @@ def main():
     assert "parameter_name: ParameterValue(" in launch_text
     assert '"imu_self_test_mode"' in launch_text
     assert '"imu_self_test_mode": LaunchConfiguration("imu_self_test_mode")' in launch_text
+    assert '("namespace", "", "ROS namespace for this camera.")' in launch_text
+    assert 'namespace=LaunchConfiguration("namespace")' in launch_text
+    assert "enable_cam1" not in launch_text
+    assert "cam1_device_index" not in launch_text
     assert "description=" in launch_text
 
 

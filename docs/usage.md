@@ -35,6 +35,67 @@ rqt_image_view
 
 Select the `image_raw/compressed` topic in the viewer.
 
+## Multiple Cameras
+
+The camera node uses relative topic names, so each camera can publish the same
+topic set under a different ROS namespace. For example, one camera can publish
+`/cam0/image_raw` while another publishes `/cam1/image_raw`.
+
+Start one node per camera. For the first camera:
+
+```bash
+ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
+  namespace:=cam0 \
+  node_name:=vizionsdk_camera_cam0 \
+  device_index:=0 \
+  image_frame_id:=cam0_camera_optical_frame \
+  imu_frame_id:=cam0_imu_link \
+  publish_image:=true \
+  image_format:=UYVY \
+  image_rate_hz:=5.0
+```
+
+In another terminal, start the second camera:
+
+```bash
+ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
+  namespace:=cam1 \
+  node_name:=vizionsdk_camera_cam1 \
+  device_index:=1 \
+  image_frame_id:=cam1_camera_optical_frame \
+  imu_frame_id:=cam1_imu_link \
+  publish_image:=true \
+  image_format:=UYVY \
+  image_rate_hz:=5.0
+```
+
+Repeat the same pattern for more cameras by choosing another `namespace`,
+`node_name`, `device_index`, `image_frame_id`, and `imu_frame_id`.
+Adjust `image_rate_hz` for your bandwidth and CPU budget, especially when
+publishing high-resolution UYVY streams from multiple cameras.
+
+The main topics become:
+
+- `/cam0/imu/data` and `/cam1/imu/data`
+- `/cam0/image_raw` and `/cam1/image_raw`
+- `/cam0/camera_info` and `/cam1/camera_info`
+- `/cam0/camera/status` and `/cam1/camera/status`
+
+If `list_devices` shows a different order, change `device_index` for each
+camera instance:
+
+```bash
+ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
+  namespace:=cam2 \
+  node_name:=vizionsdk_camera_cam2 \
+  device_index:=2 \
+  image_frame_id:=cam2_camera_optical_frame \
+  imu_frame_id:=cam2_imu_link \
+  publish_image:=true \
+  image_format:=UYVY \
+  image_rate_hz:=5.0
+```
+
 If RViz or `rqt_image_view` reports an error like this:
 
 ```text
@@ -147,6 +208,7 @@ ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
 
 ## Key Parameters
 
+- `namespace`: ROS namespace for the camera node, default empty
 - `device_index`: VizionSDK camera index, default `0`
 - `publish_imu`: enable IMU publishing, default `true`
 - `publish_status`: enable camera status publishing, default `true`

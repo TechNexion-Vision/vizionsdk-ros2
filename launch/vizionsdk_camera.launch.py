@@ -7,6 +7,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 LAUNCH_ARGUMENTS = (
     ("node_name", "vizionsdk_camera", "ROS node name."),
+    ("namespace", "", "ROS namespace for this camera."),
     ("device_index", "0", "VizionSDK camera index from list_devices."),
     ("publish_imu", "true", "Publish sensor_msgs/msg/Imu on imu/data."),
     ("publish_status", "true", "Publish diagnostic camera status on camera/status."),
@@ -96,6 +97,7 @@ def generate_launch_description():
         package="vizionsdk_ros2",
         executable="vizionsdk_camera_node",
         name=LaunchConfiguration("node_name"),
+        namespace=LaunchConfiguration("namespace"),
         output="screen",
         parameters=[
             {

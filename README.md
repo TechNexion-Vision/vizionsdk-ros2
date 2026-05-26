@@ -105,6 +105,35 @@ ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
   image_format:=MJPG
 ```
 
+Start multiple cameras by launching one node per camera with separate ROS
+namespaces. For example, start the first camera:
+
+```bash
+ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
+  namespace:=cam0 \
+  node_name:=vizionsdk_camera_cam0 \
+  device_index:=0 \
+  image_frame_id:=cam0_camera_optical_frame \
+  imu_frame_id:=cam0_imu_link \
+  publish_image:=true \
+  image_format:=UYVY \
+  image_rate_hz:=5.0
+```
+
+Then start the second camera in another terminal:
+
+```bash
+ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
+  namespace:=cam1 \
+  node_name:=vizionsdk_camera_cam1 \
+  device_index:=1 \
+  image_frame_id:=cam1_camera_optical_frame \
+  imu_frame_id:=cam1_imu_link \
+  publish_image:=true \
+  image_format:=UYVY \
+  image_rate_hz:=5.0
+```
+
 ## Topics
 
 - `imu/data`: `sensor_msgs/msg/Imu`
@@ -112,6 +141,10 @@ ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
 - `image_raw/compressed`: `sensor_msgs/msg/CompressedImage` for `MJPG`
 - `camera_info`: `sensor_msgs/msg/CameraInfo` when `VxGetIntrinsics` succeeds
 - `camera/status`: `diagnostic_msgs/msg/DiagnosticArray`
+
+When a namespace is set, these topics are published below it. For example,
+`namespace:=cam0` publishes `/cam0/image_raw`, `/cam0/imu/data`,
+`/cam0/camera_info`, and `/cam0/camera/status`.
 
 ## Parameters
 
