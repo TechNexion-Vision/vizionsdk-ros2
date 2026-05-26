@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 
+#include "test_assertions.hpp"
+
 namespace {
 
 void ExpectNear(double actual, double expected, double tolerance = 1e-6) {

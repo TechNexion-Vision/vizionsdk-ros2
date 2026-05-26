@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "test_assertions.hpp"
+
 int main() {
     using namespace vizionsdk_ros2;
 

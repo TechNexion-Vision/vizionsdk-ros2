@@ -3,9 +3,9 @@
 <package format="3">
   <name>vizionsdk_ros2</name>
   <version>0.1.0</version>
-  <description>ROS2 bridge for VizionSDK camera IMU and image streams.</description>
+  <description>ROS 2 bridge for VizionSDK camera IMU and image streams.</description>
   <maintainer email="support@technexion.com">VizionSDK Maintainers</maintainer>
-  <license>Proprietary</license>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
@@ -13,6 +13,9 @@
   <depend>diagnostic_msgs</depend>
   <depend>rcl_interfaces</depend>
   <depend>sensor_msgs</depend>
+
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
 
   <test_depend>ament_cmake</test_depend>
 

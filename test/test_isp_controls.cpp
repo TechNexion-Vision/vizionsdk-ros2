@@ -3,6 +3,8 @@
 #include <cassert>
 #include <iostream>
 
+#include "test_assertions.hpp"
+
 int main() {
     using namespace vizionsdk_ros2;
 

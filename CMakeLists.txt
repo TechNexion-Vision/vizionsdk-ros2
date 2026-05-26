@@ -62,6 +62,8 @@ ament_target_dependencies(yuv422_to_bgr_node rclcpp sensor_msgs)
 
 if(BUILD_TESTING)
   include(CTest)
+  find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
   add_executable(test_conversions
     test/test_conversions.cpp
   )
@@ -79,6 +81,10 @@ if(BUILD_TESTING)
   )
   target_link_libraries(test_isp_controls PRIVATE vizionsdk_ros2_conversions)
   add_test(NAME test_isp_controls COMMAND test_isp_controls)
+
+  add_test(NAME test_launch_isp_controls
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/test_launch_isp_controls.py
+  )
 
   add_executable(test_yuv422_converter
     test/test_yuv422_converter.cpp
