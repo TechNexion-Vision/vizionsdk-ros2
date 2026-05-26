@@ -23,6 +23,12 @@ int main() {
             "1234",
             "SN0001",
             true,
+            {
+                {0, 640, 480, 120, VX_IMAGE_FORMAT::UYVY},
+                {1, 1280, 720, 30, VX_IMAGE_FORMAT::MJPG},
+            },
+            true,
+            true,
         },
         {
             1,
@@ -31,6 +37,9 @@ int main() {
             VX_CAMERA_INTERFACE_TYPE::INTERFACE_MIPI_CSI2,
             "",
             "",
+            false,
+            {},
+            true,
             false,
         },
     };
@@ -41,6 +50,9 @@ int main() {
     assert(output.find("interface: USB") != std::string::npos);
     assert(output.find("hardware_id: 1234") != std::string::npos);
     assert(output.find("serial: SN0001") != std::string::npos);
+    assert(output.find("formats:") != std::string::npos);
+    assert(output.find("[0] UYVY 640x480 @ 120 fps") != std::string::npos);
+    assert(output.find("[1] MJPG 1280x720 @ 30 fps") != std::string::npos);
     assert(output.find("[1] Unknown Vizion camera") != std::string::npos);
     assert(output.find("interface: MIPI_CSI2") != std::string::npos);
     assert(output.find("warning: failed to open device details") != std::string::npos);

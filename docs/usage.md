@@ -35,6 +35,53 @@ rqt_image_view
 
 Select the `image_raw/compressed` topic in the viewer.
 
+## Device And Format Listing
+
+List connected cameras:
+
+```bash
+ros2 run vizionsdk_ros2 list_devices
+```
+
+List connected cameras and the image formats advertised by each device:
+
+```bash
+ros2 run vizionsdk_ros2 list_devices --formats
+```
+
+Use the reported format names, widths, heights, and frame rates with
+`image_format`, `image_width`, `image_height`, and `image_framerate` when
+starting a camera node.
+
+## Image Format And Size
+
+Enable image publishing and request one of the formats advertised by
+`list_devices --formats`:
+
+```bash
+ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
+  publish_image:=true \
+  image_format:=MJPG \
+  image_width:=1920 \
+  image_height:=1080 \
+  image_framerate:=30
+```
+
+The node selects a camera mode that matches the requested fields. Keep
+`image_width`, `image_height`, or `image_framerate` at `0` to accept any value
+for that field. For example, this requests any `UYVY` mode at 30 fps:
+
+```bash
+ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
+  publish_image:=true \
+  image_format:=UYVY \
+  image_framerate:=30
+```
+
+`image_rate_hz` is separate from the camera mode request. It controls the ROS
+image publishing timer; the default `0.0` publishes at the selected camera
+format frame rate. Set it only when you want to throttle image publishing.
+
 ## Multiple Cameras
 
 The camera node uses relative topic names, so each camera can publish the same
@@ -52,7 +99,9 @@ ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
   imu_frame_id:=cam0_imu_link \
   publish_image:=true \
   image_format:=UYVY \
-  image_rate_hz:=5.0
+  image_width:=1280 \
+  image_height:=720 \
+  image_framerate:=30
 ```
 
 In another terminal, start the second camera:
@@ -66,13 +115,14 @@ ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
   imu_frame_id:=cam1_imu_link \
   publish_image:=true \
   image_format:=UYVY \
-  image_rate_hz:=5.0
+  image_width:=1280 \
+  image_height:=720 \
+  image_framerate:=30
 ```
 
 Repeat the same pattern for more cameras by choosing another `namespace`,
-`node_name`, `device_index`, `image_frame_id`, and `imu_frame_id`.
-Adjust `image_rate_hz` for your bandwidth and CPU budget, especially when
-publishing high-resolution UYVY streams from multiple cameras.
+`node_name`, `device_index`, `image_frame_id`, `imu_frame_id`, and camera image
+mode.
 
 The main topics become:
 
@@ -93,7 +143,9 @@ ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
   imu_frame_id:=cam2_imu_link \
   publish_image:=true \
   image_format:=UYVY \
-  image_rate_hz:=5.0
+  image_width:=1280 \
+  image_height:=720 \
+  image_framerate:=30
 ```
 
 If RViz or `rqt_image_view` reports an error like this:
@@ -222,8 +274,8 @@ ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
 - `imu_frame_id`: IMU message frame ID, default `vizion_imu_link`
 - `publish_image`: enable image publishing, default `false`
 - `image_format`: `auto`, `YUY2`, `UYVY`, `NV12`, `MJPG`, `BGRA`, `BGRX`, `BGR`, `RGB16`, or `RGB`
-- `image_width`, `image_height`, `image_framerate`: `0` means wildcard
-- `image_rate_hz`: `0.0` uses the selected camera format frame rate
+- `image_width`, `image_height`, `image_framerate`: requested camera mode fields; `0` means wildcard
+- `image_rate_hz`: ROS image publishing rate, default `0.0` uses the selected camera format frame rate
 - `image_timeout_ms`: SDK image capture timeout in milliseconds, default `1000`
 - `image_frame_id`: image and `camera_info` frame ID, default `vizionsdk_camera_optical_frame`
 - `isp.*`: ISP image processing controls, `-1` leaves the SDK value unchanged; all are exposed as launch arguments by replacing `.` with `_`

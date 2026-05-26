@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VxPublicTypes.hpp"
+#include "vizionsdk_ros2/conversions.hpp"
 
 #include <optional>
 #include <sstream>
@@ -17,6 +18,9 @@ struct DeviceInfo {
     std::string hardware_id;
     std::string serial_number;
     bool details_available{};
+    std::vector<VxFormat> formats;
+    bool formats_requested{};
+    bool formats_available{};
 };
 
 inline std::string InterfaceTypeName(VX_CAMERA_INTERFACE_TYPE type) {
@@ -53,6 +57,18 @@ inline std::string FormatDeviceList(const std::vector<DeviceInfo>& devices) {
         oss << "    serial: " << ValueOrUnknown(device.serial_number) << "\n";
         if (!device.details_available) {
             oss << "    warning: failed to open device details\n";
+        }
+        if (device.formats_requested) {
+            if (device.formats_available && !device.formats.empty()) {
+                oss << "    formats:\n";
+                for (const auto& format : device.formats) {
+                    oss << "      [" << static_cast<unsigned int>(format.mediatypeIdx) << "] "
+                        << FormatName(format.format) << " " << format.width << "x" << format.height
+                        << " @ " << format.framerate << " fps\n";
+                }
+            } else {
+                oss << "    formats: unavailable\n";
+            }
         }
     }
     return oss.str();

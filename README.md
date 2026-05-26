@@ -90,6 +90,12 @@ List connected cameras:
 ros2 run vizionsdk_ros2 list_devices
 ```
 
+List connected cameras with supported image formats:
+
+```bash
+ros2 run vizionsdk_ros2 list_devices --formats
+```
+
 Start the camera node with IMU publishing:
 
 ```bash
@@ -102,8 +108,16 @@ Start IMU plus camera image publishing:
 ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
   device_index:=0 \
   publish_image:=true \
-  image_format:=MJPG
+  image_format:=MJPG \
+  image_width:=1920 \
+  image_height:=1080 \
+  image_framerate:=30
 ```
+
+Use `ros2 run vizionsdk_ros2 list_devices --formats` to see the formats,
+resolutions, and frame rates advertised by each camera. Pass those values with
+`image_format`, `image_width`, `image_height`, and `image_framerate`; leave a
+value as `0` to accept any match for that field.
 
 Start multiple cameras by launching one node per camera with separate ROS
 namespaces. For example, start the first camera:
@@ -117,7 +131,9 @@ ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
   imu_frame_id:=cam0_imu_link \
   publish_image:=true \
   image_format:=UYVY \
-  image_rate_hz:=5.0
+  image_width:=1280 \
+  image_height:=720 \
+  image_framerate:=30
 ```
 
 Then start the second camera in another terminal:
@@ -131,7 +147,9 @@ ros2 launch vizionsdk_ros2 vizionsdk_camera.launch.py \
   imu_frame_id:=cam1_imu_link \
   publish_image:=true \
   image_format:=UYVY \
-  image_rate_hz:=5.0
+  image_width:=1280 \
+  image_height:=720 \
+  image_framerate:=30
 ```
 
 ## Topics
