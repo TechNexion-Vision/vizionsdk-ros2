@@ -61,6 +61,7 @@ ISP_CONTROL_PARAMETERS = (
     "isp.flick_mode",
     "isp.jpeg_quality",
     "isp.trigger_mode",
+    "isp.flash_mode",
     "isp.ehdr_mode",
     "isp.ehdr_exposure_min_number",
     "isp.ehdr_exposure_max_number",

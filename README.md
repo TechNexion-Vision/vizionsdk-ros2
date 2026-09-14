@@ -19,6 +19,7 @@ This wrapper targets Linux platforms where both ROS 2 and VizionSDK are availabl
 |-----------|---------------|--------------------|
 | Ubuntu 22.04 | AMD64 / ARM64 | Humble |
 | Ubuntu 24.04 | AMD64 / ARM64 | Jazzy |
+| Ubuntu 26.04 | AMD64 / ARM64 | Lyrical |
 | NVIDIA Jetson / NXP i.MX / Raspberry Pi / TI TDA4VM | ARM64 | Distribution-dependent |
 
 Camera support follows the installed VizionSDK release. See the VizionSDK
@@ -27,7 +28,13 @@ documentation for the complete platform, camera, and sensor support matrix.
 ## Prerequisites
 
 Install ROS 2 and VizionSDK before building this wrapper. Replace `<distro>`
-with your ROS 2 distribution, for example `humble` or `jazzy`.
+with the ROS 2 distribution for the installed Ubuntu release:
+
+| Ubuntu | `<distro>` |
+|--------|------------|
+| 22.04 | `humble` |
+| 24.04 | `jazzy` |
+| 26.04 | `lyrical` |
 
 ```bash
 source /opt/ros/<distro>/setup.bash

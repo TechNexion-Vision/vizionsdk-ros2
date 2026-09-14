@@ -41,6 +41,7 @@ inline const std::vector<IspControlParameter>& IspControlParameters() {
         {"isp.flick_mode", VX_ISP_IMAGE_PROPERTIES::ISP_IMAGE_FLICK_MODE},
         {"isp.jpeg_quality", VX_ISP_IMAGE_PROPERTIES::ISP_IMAGE_JPEG_QUALITY},
         {"isp.trigger_mode", VX_ISP_IMAGE_PROPERTIES::ISP_IMAGE_TRIGGER_MODE},
+        {"isp.flash_mode", VX_ISP_IMAGE_PROPERTIES::ISP_IMAGE_FLASH_MODE},
         {"isp.ehdr_mode", VX_ISP_IMAGE_PROPERTIES::ISP_IMAGE_EHDR_MODE},
         {"isp.ehdr_exposure_min_number",
          VX_ISP_IMAGE_PROPERTIES::ISP_EHDR_EXPOSURE_MIN_NUMBER},

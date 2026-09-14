@@ -40,14 +40,23 @@ target_include_directories(vizionsdk_ros2_node
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(vizionsdk_ros2_node vizionsdk_ros2_conversions)
-ament_target_dependencies(vizionsdk_ros2_node diagnostic_msgs rcl_interfaces rclcpp sensor_msgs)
+target_link_libraries(vizionsdk_ros2_node
+  PUBLIC
+    vizionsdk_ros2_conversions
+    rclcpp::rclcpp
+    ${diagnostic_msgs_TARGETS}
+    ${rcl_interfaces_TARGETS}
+    ${sensor_msgs_TARGETS}
+)
 
 add_executable(vizionsdk_camera_node
   src/main.cpp
 )
-target_link_libraries(vizionsdk_camera_node vizionsdk_ros2_node)
-ament_target_dependencies(vizionsdk_camera_node rclcpp)
+target_link_libraries(vizionsdk_camera_node
+  PRIVATE
+    vizionsdk_ros2_node
+    rclcpp::rclcpp
+)
 
 add_executable(list_devices
   src/list_devices.cpp
@@ -57,8 +66,12 @@ target_link_libraries(list_devices vizionsdk_ros2_conversions)
 add_executable(yuv422_to_bgr_node
   src/yuv422_to_bgr_node.cpp
 )
-target_link_libraries(yuv422_to_bgr_node vizionsdk_ros2_conversions)
-ament_target_dependencies(yuv422_to_bgr_node rclcpp sensor_msgs)
+target_link_libraries(yuv422_to_bgr_node
+  PRIVATE
+    vizionsdk_ros2_conversions
+    rclcpp::rclcpp
+    ${sensor_msgs_TARGETS}
+)
 
 if(BUILD_TESTING)
   include(CTest)
